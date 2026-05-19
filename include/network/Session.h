@@ -26,8 +26,12 @@ class Session {
     void handleRead();
     void handleWrite();
 
-    bool tryParseMessage(std::vector<uint8_t>& out_message);
-    void dispatchToWorker(const std::vector<uint8_t>& message);
+    int read();
+    int write();
+    int flush();
+
+    // bool tryParseMessage(std::vector<uint8_t>& out_message);
+    // void dispatchToWorker(const std::vector<uint8_t>& message);
 
     void close();
 

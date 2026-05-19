@@ -13,8 +13,8 @@ class MacConnection : IConnection {
 public :
     ~MacConnection() = default;
     bool create(const std::string& host, int port);
-    int read(Buffer &buffer);
-    int write(const uint8_t* buffer, size_t len);
+    int read(Buffer &buffer, size_t len);
+    int write(Buffer& buffer);
     void close();
     intptr_t getHandle() const;
 };

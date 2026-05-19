@@ -22,24 +22,13 @@ bool MacConnection::create(const std::string& host, int port) {
     return connected;
 }
 
-int MacConnection::read(Buffer &buffer) {
-    int len = 0;
-    uint8_t temp[4096]; //TODO hardcoded
-    while (true) {
-        int n = ::recv(sockfd, temp, sizeof(temp), 0);
-        if (n > 0) buffer.append(temp, n);
-        else if (n == 0) return 0;
-        else {
-            if (errno == EAGAIN || errno == EWOULDBLOCK) break;
-            return -1;
-        }
-        len += n;
-    }
-    return len;
+int MacConnection::read(Buffer &buffer, size_t len) {
+    ::read(sockfd, buffer.data(), len);
 }
 
-int MacConnection::write(const uint8_t *buffer, size_t len) {
-
+//
+int MacConnection::write(Buffer &buffer) {
+    ::send(sockfd, buffer.peek(), buffer.readableBytes(), MSG_NOSIGNAL);
 }
 
 void MacConnection::close() {

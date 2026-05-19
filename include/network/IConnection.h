@@ -15,8 +15,8 @@ class IConnection {
 public:
     virtual ~IConnection() = default;
     virtual bool create(const std::string& host, int port) = 0;
-    virtual int read(Buffer &buffer) = 0;
-    virtual int write(const uint8_t* buffer, size_t len) = 0;
+    virtual int read(Buffer &buffer, size_t len) = 0;
+    virtual int write(Buffer& buffer) = 0;
 
     virtual void close() = 0;
 
