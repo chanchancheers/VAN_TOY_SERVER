@@ -1,0 +1,111 @@
+# =========================
+# Build output directories
+# =========================
+/build/
+/bin/
+/out/
+/Debug/
+/Release/
+
+# CLion / CMake build dirs
+/cmake-build-*/
+
+# =========================
+# CMake
+# =========================
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+compile_commands.json
+Makefile
+
+# =========================
+# Ninja
+# =========================
+.ninja_deps
+.ninja_log
+build.ninja
+
+# =========================
+# Compiled objects / libs
+# =========================
+*.o
+*.obj
+*.a
+*.lib
+*.so
+*.dll
+*.dylib
+
+# =========================
+# Executables
+# =========================
+*.exe
+*.out
+*.app
+
+# =========================
+# Visual Studio
+# =========================
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.vcxproj.user
+
+# =========================
+# VSCode
+# =========================
+.vscode/
+
+# =========================
+# JetBrains IDEs
+# =========================
+.idea/
+
+# =========================
+# Xcode
+# =========================
+DerivedData/
+
+# =========================
+# macOS
+# =========================
+.DS_Store
+
+# =========================
+# Linux temp files
+# =========================
+*~
+
+# =========================
+# Logs
+# =========================
+*.log
+
+# =========================
+# SQLite database files
+# =========================
+*.db
+*.sqlite
+*.sqlite3
+
+# =========================
+# Temporary files
+# =========================
+*.tmp
+*.temp
+
+# =========================
+# Coverage / profiling
+# =========================
+coverage/
+*.gcda
+*.gcno
+*.gcov
+
+# =========================
+# Others
+# =========================
+deprecated/
