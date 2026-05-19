@@ -27,7 +27,7 @@ class Session {
     void handleWrite();
 
     int read();
-    int write();
+    int write(const uint8_t* data, size_t len);
     int flush();
 
     // bool tryParseMessage(std::vector<uint8_t>& out_message);

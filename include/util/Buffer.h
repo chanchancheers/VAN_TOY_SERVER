@@ -13,7 +13,7 @@ class Buffer {
     int offset = 0;
     int threshold = 1024 * 8;
 public :
-    int append(uint8_t* data, int len);
+    int append(const uint8_t* data, size_t len);
     int consume(int n);
 
     const uint8_t* peek() const;

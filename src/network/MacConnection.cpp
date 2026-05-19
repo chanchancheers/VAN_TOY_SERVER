@@ -27,8 +27,8 @@ int MacConnection::read(Buffer &buffer, size_t len) {
 }
 
 //
-int MacConnection::write(Buffer &buffer) {
-    ::send(sockfd, buffer.peek(), buffer.readableBytes(), MSG_NOSIGNAL);
+int MacConnection::send(const uint8_t* data, size_t len) {
+    ::send(sockfd, data, len, MSG_NOSIGNAL);
 }
 
 void MacConnection::close() {

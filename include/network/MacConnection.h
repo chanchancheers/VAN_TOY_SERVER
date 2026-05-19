@@ -14,7 +14,7 @@ public :
     ~MacConnection() = default;
     bool create(const std::string& host, int port);
     int read(Buffer &buffer, size_t len);
-    int write(Buffer& buffer);
+    int send(const uint8_t* data, size_t len);
     void close();
     intptr_t getHandle() const;
 };

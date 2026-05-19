@@ -23,14 +23,16 @@ int Session::read() {
     return len;
 }
 
-int Session::write() {
-
+int Session::write(const uint8_t* data, size_t len) {
+    write_buffer.append(data, len);
+    //TODO isWriting 같은 상태처리 필요
+    return flush();
 }
 
 int Session::flush() {
     int n = 0;
     while (write_buffer.readableBytes() > 0) {
-        int sent = conn->write(write_buffer);
+        int sent = conn->send(write_buffer.peek(), write_buffer.readableBytes());
         if (sent > 0) {
             write_buffer.consume(sent);
             n += sent;
