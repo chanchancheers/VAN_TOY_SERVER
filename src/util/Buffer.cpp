@@ -29,6 +29,10 @@ const uint8_t* Buffer::peek() const {
     return buffer.data() + offset;
 }
 
-int Buffer::readableBytes() {
+size_t Buffer::readableBytes() {
     return buffer.size() - offset;
+}
+
+void Buffer::clear() {
+    consume(buffer.size());
 }

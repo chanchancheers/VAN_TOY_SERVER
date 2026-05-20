@@ -17,9 +17,10 @@ public :
     int consume(int n);
 
     const uint8_t* peek() const;
-    int readableBytes();
+    size_t readableBytes();
     int size();
     uint8_t* data() { return buffer.data(); }
+    void clear();
 
 
 };
