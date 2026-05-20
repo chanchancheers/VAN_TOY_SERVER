@@ -45,3 +45,7 @@ int Session::flush() {
     }
     return n;
 }
+
+intptr_t Session::getSockfd() {
+    return conn->getHandle();
+}

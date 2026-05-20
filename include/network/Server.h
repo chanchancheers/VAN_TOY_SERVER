@@ -7,14 +7,7 @@
 
 class Server {
     std::unordered_map<int, std::shared_ptr<Session>> sessions;
-    int kq;
 public:
-    Server() {
-        if ((kq = kqueue()) == -1) {
-            perror("kqueue");
-            exit(EXIT_FAILURE);
-        }
-    }
     void accept();
 };
 

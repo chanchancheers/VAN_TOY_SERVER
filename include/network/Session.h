@@ -39,6 +39,8 @@ public :
     explicit Session(std::shared_ptr<IConnection> conn);
     ~Session();
 
+    intptr_t getSockfd();
+
     int BUFFER_SIZE = 4096;
 
     void onReadable();
