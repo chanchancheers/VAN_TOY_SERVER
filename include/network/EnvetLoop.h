@@ -38,6 +38,7 @@ public :
     int* getPipefd();
     void wakeUp();
     void doLoop();
+    std::vector<struct kevent> doLoop(int& event_size);
 };
 
 #endif //SOCKET_SERVER_V2_ENVETLOOP_H

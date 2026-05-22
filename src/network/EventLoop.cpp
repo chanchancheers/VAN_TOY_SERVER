@@ -89,12 +89,12 @@ void EventLoop::wakeUp() {
     int n = write(pipefd[1], &garbage, 1);
 }
 
-void EventLoop::doLoop() {
+std::vector<struct kevent> EventLoop::doLoop(int& event_size) {
     while (true) {
         //1. 이벤트 발생 체크 후 등록
         applyPendingChanges();
         //2. 현상태로 고정 후 감시 시작
-        int events = kevent(kq,
+        event_size = kevent(kq,
                             nullptr,
                             0,
                             evlist.data(),
@@ -102,14 +102,6 @@ void EventLoop::doLoop() {
                             NULL);
         /*!--  아무 이벤트가 없다면 이 시점에서 대기가 이루어진다   --!*/
 
-        for (int i = 0; i < events; i++) {
-            struct kevent& ev = evlist[i];
-            if (ev.ident == pipefd[0]) {
-                while (read(pipefd[0], &read_buffer, read_buffer.size()) > 0);
-                read_buffer.clear();
-                continue;
-            }
-            //handleEvent();
-        }
+        return evlist;
     }
 }
