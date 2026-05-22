@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 23)
 add_executable(socket_server_v2 main.cpp
         deprecated/Socket_mac.cpp
         deprecated/ISocket.h
-        src/network/SocketFactory.cpp
+        deprecated/SocketFactory.cpp
         deprecated/SocketFactory.h
         deprecated/Socket_mac.h
         deprecated/Socket_win.h
@@ -18,4 +18,9 @@ add_executable(socket_server_v2 main.cpp
         src/network/MacConnection.cpp
         src/network/Session.cpp
         include/util/Buffer.h
-        src/util/Buffer.cpp)
+        src/util/Buffer.cpp
+        include/network/protocol/sendProtocol.h
+        src/network/protocol/sendProtocol.cpp
+        src/network/Server.h.cpp
+        include/network/EnvetLoop.h
+        src/network/EventLoop.cpp)
