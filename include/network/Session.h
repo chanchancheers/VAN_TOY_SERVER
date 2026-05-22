@@ -29,6 +29,7 @@ class Session {
     int read();
     int write(const uint8_t* data, size_t len);
     int flush();
+    bool checkConeectionAlive();
 
     // bool tryParseMessage(std::vector<uint8_t>& out_message);
     // void dispatchToWorker(const std::vector<uint8_t>& message);

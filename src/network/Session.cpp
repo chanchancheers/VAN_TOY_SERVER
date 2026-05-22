@@ -49,3 +49,8 @@ int Session::flush() {
 intptr_t Session::getSockfd() {
     return conn->getHandle();
 }
+
+bool Session::checkConeectionAlive() {
+    return conn->msgPeek() > 0;
+}
+
