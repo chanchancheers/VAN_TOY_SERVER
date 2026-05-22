@@ -3,8 +3,23 @@
 //
 #include "../../include/network/Session.h"
 
-void Session::handleRead() {
+std::string Session::handleRead() {
+    std::string returned_data;
+    int read_byte = read();
+    // returned_data = reinterpret_cast<std::string>
+    for (int i = 0; i < read_byte; i++) {
+        returned_data.push_back(*(read_buffer.peek() + i));
+    }
+    return returned_data;
+}
 
+void Session::handleWrite(std::string client_data) {
+    int write_byte = write(reinterpret_cast<const uint8_t*>(client_data.data()), client_data.size());
+    // abort(); 또는 whole retry;
+    int sent_byte = flush();
+    if (client_data.size() != sent_byte) {
+        // abort(); 또는 whole retry;
+    }
 }
 
 int Session::read() {
@@ -26,7 +41,7 @@ int Session::read() {
 int Session::write(const uint8_t* data, size_t len) {
     write_buffer.append(data, len);
     //TODO isWriting 같은 상태처리 필요
-    return flush();
+    return len;
 }
 
 int Session::flush() {

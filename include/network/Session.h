@@ -23,8 +23,8 @@ class Session {
 
     State state;
 
-    void handleRead();
-    void handleWrite();
+    std::string handleRead();
+    void handleWrite(std::string client_data);
 
     int read();
     int write(const uint8_t* data, size_t len);
