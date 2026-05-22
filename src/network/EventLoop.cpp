@@ -78,7 +78,7 @@ void EventLoop::registerSession(Session session) {
 }
 
 void EventLoop::applyPendingChanges() {
-    if (kevent(kq, chlist.data(), chlist.size(), evlist.data(), evlist.size(),NULL) == 1) {
+    if (kevent(kq, chlist.data(), chlist.size(), evlist.data(), evlist.size(),NULL) == -1) {
         perror("kevent has error");
         exit(EXIT_FAILURE);
     }
@@ -87,6 +87,10 @@ void EventLoop::applyPendingChanges() {
 void EventLoop::wakeUp() {
     int garbage = 1;
     int n = write(pipefd[1], &garbage, 1);
+    if (n == -1 && errno != EAGAIN && errno != EWOULDBLOCK) {
+        perror("write pipe error");
+        exit(EXIT_FAILURE);
+    }
 }
 
 std::vector<struct kevent> EventLoop::doLoop(int& event_size) {
