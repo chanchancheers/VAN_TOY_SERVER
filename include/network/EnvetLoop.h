@@ -37,8 +37,10 @@ public :
     void applyPendingChanges();
     int* getPipefd();
     void wakeUp();
-    void doLoop();
     std::vector<struct kevent> doLoop(int& event_size);
+
+    Buffer getReadBuffer() { return read_buffer; }
+    Buffer getWriteBuffer() { return write_buffer; }
 };
 
 #endif //SOCKET_SERVER_V2_ENVETLOOP_H

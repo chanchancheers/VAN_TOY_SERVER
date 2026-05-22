@@ -3,6 +3,8 @@
 
 #include <unordered_map>
 #include <sys/event.h>
+
+#include "EnvetLoop.h"
 #include "Session.h"
 
 class Server {
