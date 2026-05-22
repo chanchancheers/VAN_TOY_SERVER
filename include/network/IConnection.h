@@ -16,6 +16,7 @@ public:
     virtual ~IConnection() = default;
     virtual bool create(const std::string& host, int port) = 0;
     virtual int read(Buffer &buffer, size_t len) = 0;
+    virtual int msgPeek() = 0;
     virtual int send(const uint8_t* data, size_t len) = 0;
     virtual void close() = 0;
 
