@@ -69,7 +69,10 @@ wakeupEventLoop();
 */
 
 
-
+/**
+ * 세션이 생성될 때 세션의 소켓fd로 이벤트를 생성 및 리스트업
+ * @param session
+ */
 void EventLoop::registerSession(Session session) {
     // chlist에 감시할 sockfd를 넣고, READ가 발생하는지 본다. 등록하면서 ADD 및 ENABLE 처리.
     struct kevent kev;
@@ -77,6 +80,9 @@ void EventLoop::registerSession(Session session) {
     chlist.push_back(kev);
 }
 
+/**
+ * 현재 chlist의 담긴 이벤트를 커널 이벤트로 등록
+ */
 void EventLoop::applyPendingChanges() {
     if (kevent(kq, chlist.data(), chlist.size(), evlist.data(), evlist.size(), nullptr) == -1) {
         perror("kevent has error");
@@ -84,6 +90,9 @@ void EventLoop::applyPendingChanges() {
     }
 }
 
+/**
+ * 이벤트루프의 blocking 상태를 해제
+ */
 void EventLoop::wakeUp() {
     int garbage = 1;
     int n = write(pipefd[1], &garbage, 1);
@@ -93,6 +102,11 @@ void EventLoop::wakeUp() {
     }
 }
 
+/**
+ *
+ * @param event_size 발생한 이벤트 수를 기록할 참조 변수
+ * @return 발생한 이벤트 리스트
+ */
 std::vector<struct kevent> EventLoop::doLoop(int& event_size) {
     while (true) {
         //1. 이벤트 발생 체크 후 등록

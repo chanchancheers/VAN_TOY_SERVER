@@ -25,6 +25,9 @@ int Buffer::size() {
     return buffer.size();
 }
 
+/**
+ * @return 읽을 수 있는 버퍼의 배열포인터
+ */
 const uint8_t* Buffer::peek() const {
     return buffer.data() + offset;
 }
