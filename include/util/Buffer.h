@@ -13,11 +13,11 @@ class Buffer {
     int offset = 0;
     int threshold = 1024 * 8;
 public :
-    int append(const uint8_t* data, size_t len);
+    int append(const uint8_t* data, std::size_t len);
     int consume(int n);
 
     const uint8_t* peek() const;
-    size_t readableBytes();
+    std::size_t readableBytes();
     int size();
     uint8_t* data() { return buffer.data(); }
     void clear();

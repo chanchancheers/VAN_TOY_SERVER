@@ -3,7 +3,7 @@
 //
 #include "../../include/util/Buffer.h"
 
-int Buffer::append(const uint8_t* data, size_t len) {
+int Buffer::append(const uint8_t* data, std::size_t len) {
     int i = 0;
     for (i = 0; i < len; i++) {
         buffer.push_back(data[i]);
@@ -29,7 +29,7 @@ const uint8_t* Buffer::peek() const {
     return buffer.data() + offset;
 }
 
-size_t Buffer::readableBytes() {
+std::size_t Buffer::readableBytes() {
     return buffer.size() - offset;
 }
 

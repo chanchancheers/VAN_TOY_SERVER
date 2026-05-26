@@ -22,7 +22,7 @@ bool MacConnection::create(const std::string& host, int port) {
     return connected;
 }
 
-int MacConnection::read(Buffer &buffer, size_t len) {
+int MacConnection::read(Buffer &buffer, std::size_t len) {
     ::read(sockfd, buffer.data(), len);
 }
 
@@ -32,7 +32,7 @@ int MacConnection::msgPeek() {
 }
 
 //
-int MacConnection::send(const uint8_t* data, size_t len) {
+int MacConnection::send(const uint8_t* data, std::size_t len) {
     ::send(sockfd, data, len, MSG_NOSIGNAL);
 }
 

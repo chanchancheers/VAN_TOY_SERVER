@@ -5,7 +5,6 @@
 #ifndef SOCKET_SERVER_V2_SESSION_H
 #define SOCKET_SERVER_V2_SESSION_H
 
-#include <cstdint>
 #include <vector>
 #include <memory>
 #include "../../include/network/IConnection.h"
@@ -27,7 +26,7 @@ class Session {
     void handleWrite(std::string client_data);
 
     int read();
-    int write(const uint8_t* data, size_t len);
+    int write(const uint8_t* data, std::size_t len);
     int flush();
     bool checkConeectionAlive();
 

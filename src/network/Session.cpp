@@ -38,7 +38,7 @@ int Session::read() {
     return len;
 }
 
-int Session::write(const uint8_t* data, size_t len) {
+int Session::write(const uint8_t* data, std::size_t len) {
     write_buffer.append(data, len);
     //TODO isWriting 같은 상태처리 필요
     return len;

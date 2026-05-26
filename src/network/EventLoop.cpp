@@ -2,7 +2,7 @@
 #include <sys/event.h>
 #include <sys/fcntl.h>
 
-#include "../../include/network/EnvetLoop.h"
+#include "../../include/network/EventLoop.h"
 #include "../../include/util/Buffer.h"
 
 
@@ -78,7 +78,7 @@ void EventLoop::registerSession(Session session) {
 }
 
 void EventLoop::applyPendingChanges() {
-    if (kevent(kq, chlist.data(), chlist.size(), evlist.data(), evlist.size(),NULL) == -1) {
+    if (kevent(kq, chlist.data(), chlist.size(), evlist.data(), evlist.size(), nullptr) == -1) {
         perror("kevent has error");
         exit(EXIT_FAILURE);
     }
@@ -103,7 +103,7 @@ std::vector<struct kevent> EventLoop::doLoop(int& event_size) {
                             0,
                             evlist.data(),
                             evlist.size(),
-                            NULL);
+                            nullptr);
         /*!--  아무 이벤트가 없다면 이 시점에서 대기가 이루어진다   --!*/
 
         return evlist;
