@@ -19,8 +19,11 @@ add_executable(socket_server_v2 main.cpp
         src/network/Session.cpp
         include/util/Buffer.h
         src/util/Buffer.cpp
-        include/network/protocol/sendProtocol.h
-        src/network/protocol/sendProtocol.cpp
-        src/network/Server.h.cpp
-        include/network/EnvetLoop.h
-        src/network/EventLoop.cpp)
+        include/network/EventLoop.h
+        src/network/EventLoop.cpp
+        include/network/protocol/PacketParser.h
+        src/network/protocol/PacketParser.cpp
+        include/network/protocol/VANProtocol.h
+        include/enum/PacketType.h
+        src/network/protocol/VANProtocol.cpp
+)
