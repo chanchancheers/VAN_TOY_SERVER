@@ -9,12 +9,15 @@
 #include <memory>
 #include "../../include/network/IConnection.h"
 #include "../../include/util/Buffer.h"
+#include "../../include/network/protocol/PacketParser.h"
 
 class Session {
     std::shared_ptr<IConnection> conn;
 
     Buffer read_buffer;
     Buffer write_buffer;
+
+    PacketParser packet_parser;
 
     enum class State {
         //
