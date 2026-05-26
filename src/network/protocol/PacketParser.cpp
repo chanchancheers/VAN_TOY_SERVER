@@ -10,20 +10,17 @@
  * @param buffer
  * @return Packet을 찾았을 경우 STX 이후의 위치를 반환 / 없을 경우 -1
  */
-int findPacketStart(Buffer& buffer) {
-    const uint8_t* copied = buffer.peek();
+int PacketParser::findPacketStart(Buffer &buffer) {
+    const uint8_t* p = buffer.peek();
     int pos = 0;
     while (pos + 1 < buffer.readableBytes()) {
-        if (copied[pos] == 0x50 && copied[pos + 1] == 0x53) {
+        if (p[pos] == 0x50 && p[pos+1] == 0x53) {
             buffer.consume(pos);
             return pos + 2;
         }
         pos++;
     }
-    if (copied[pos] == 0x50) {
-        buffer.consume(pos);
-    } else {
-        buffer.consume(pos + 1);
-    }
+    if (p[pos] == 0x50) buffer.consume(pos);
+    else buffer.consume(pos + 1);
     return -1;
 }

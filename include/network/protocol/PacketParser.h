@@ -6,6 +6,8 @@
 #define SOCKET_SERVER_V2_PACKETPARSER_H
 
 #include <cstdint>
+#include <optional>
+#include "VANProtocol.h"
 #include "../../enum/PacketType.h"
 #include "../../util/Buffer.h"
 
@@ -21,8 +23,9 @@ class PacketParser {
     PacketType type;
     uint16_t length;
 public :
-    const uint8_t* parse(Buffer& buffer);
+    std::optional<VANProtocol> parse(Buffer& buffer);
     int findPacketStart(Buffer& buffer);
+    int findPacketEnd(Buffer& buffer, int pos);
     int parseLength(uint8_t* data);
     int parseType(uint8_t* data);
 };
