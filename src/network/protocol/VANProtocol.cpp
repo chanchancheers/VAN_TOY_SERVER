@@ -11,8 +11,6 @@ VANProtocol::VANProtocol(const uint8_t* data, std::size_t len) {
     setWithPayload(data, len);
 }
 
-VANProtocol::VANProtocol(const std::string& data) :
-    VANProtocol(reinterpret_cast<const uint8_t*>(data.data()), data.size()) {}
 VANProtocol::VANProtocol(const std::string& payload) :
     VANProtocol(reinterpret_cast<const uint8_t*>(payload.data()), payload.size()) {}
 
@@ -39,7 +37,10 @@ void VANProtocol::setWithPayload(const uint8_t *payload, std::size_t len) {
 
     uint8_t* p = this->data.data();
     for (int i = 0; i < std::size(STX); i++) *p++ = STX[i];
-    for (int i = 0; i < len; i++) *p++ = data[i];
+    for (int i = LEN_LENGTH - 1; i > -1; i--) {
+        *p++ =  len >> (8 * i) & 0xFF;
+    }
+    for (int i = 0; i < len; i++) *p++ = payload[i];
     for (int i = 0; i < std::size(ETX); i++) *p++ = ETX[i];
 
     this->len = len;
