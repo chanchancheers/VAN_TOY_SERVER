@@ -4,8 +4,8 @@
 
 #include "../../../include/network/protocol/VANProtocol.h"
 
-uint8_t VANProtocol::STX[2] = {0x50, 0x53};
-uint8_t VANProtocol::ETX[2] = {0x50, 0x45};
+const uint8_t VANProtocol::STX[2] = {0x50, 0x53};
+const uint8_t VANProtocol::ETX[2] = {0x50, 0x45};
 
 VANProtocol::VANProtocol(const uint8_t* data, std::size_t len) {
     set(data, len);

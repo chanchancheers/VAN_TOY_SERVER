@@ -10,10 +10,9 @@
 class VANProtocol {
     std::vector<uint8_t> data;
     int len = 0;
-    static uint8_t STX[2];
-    static uint8_t ETX[2];
-
 public:
+    static const uint8_t STX[2];
+    static const uint8_t ETX[2];
     VANProtocol();
     VANProtocol(const std::string& data);
     VANProtocol(const uint8_t* data, std::size_t len);
