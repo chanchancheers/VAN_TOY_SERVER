@@ -8,7 +8,6 @@
 #include <cstdint>
 #include <optional>
 #include "VANProtocol.h"
-#include "../../enum/PacketType.h"
 #include "../../util/Buffer.h"
 
 class PacketParser {
@@ -18,10 +17,7 @@ class PacketParser {
         READ_BODY,
         CHECK_ETX
     };
-    bool headerPartiallyDetected = false;
     ParserState state;
-    PacketType type;
-    uint16_t length;
 public :
     std::optional<VANProtocol> parse(Buffer& buffer);
     int findPacketStart(Buffer& buffer);
