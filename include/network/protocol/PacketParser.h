@@ -18,12 +18,12 @@ class PacketParser {
         CHECK_ETX
     };
     ParserState state;
+    unsigned int parseLength(Buffer& buffer, unsigned int pos);
+    unsigned int parseType(uint8_t *data);
+    unsigned int findPacketStart(Buffer &buffer);
+    bool findPacketEnd(Buffer &buffer, unsigned int body_start, unsigned int length);
 public :
     std::optional<VANProtocol> parse(Buffer& buffer);
-    int findPacketStart(Buffer& buffer);
-    int findPacketEnd(Buffer& buffer, int pos);
-    int parseLength(uint8_t* data);
-    int parseType(uint8_t* data);
 };
 
 #endif //SOCKET_SERVER_V2_PACKETPARSER_H
