@@ -12,10 +12,10 @@
  */
 int PacketParser::findPacketStart(Buffer &buffer) {
     const uint8_t* p = buffer.peek();
-    int pos = 0;
+    size_t pos = 0;
     while (pos + 1 < buffer.readableBytes()) {
         if (p[pos] == 0x50 && p[pos+1] == 0x53) {
-            buffer.consume(pos);
+            buffer.consumeWithExtPos(pos, pos);
             return pos + 2;
         }
         pos++;

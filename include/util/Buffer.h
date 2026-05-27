@@ -15,6 +15,7 @@ class Buffer {
 public :
     int append(const uint8_t* data, std::size_t len);
     int consume(int n);
+    void consumeWithExtPos(int n, std::size_t& pos);
 
     const uint8_t* peek() const;
     std::size_t readableBytes();

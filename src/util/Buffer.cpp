@@ -11,14 +11,19 @@ int Buffer::append(const uint8_t* data, std::size_t len) {
     return i;
 }
 
+/**
+ * 버퍼를 소비. offset의 상한선을 초과하면 버퍼를 비우고 offset을 초기화시킨다.
+ * @param n
+ * @return erase가 발생했으면 1, 발생하지 않았으면 0을 리턴
+ */
 int Buffer::consume(int n) {
     offset += n;
-
-    if (offset > threshold) {
+    bool is_erased;
+    if (is_erased = (offset > threshold)) {
         buffer.erase(buffer.begin(), buffer.begin() + offset);
         offset = 0;
     }
-    return n;
+    return is_erased;
 }
 
 int Buffer::size() {
@@ -38,4 +43,10 @@ std::size_t Buffer::readableBytes() {
 
 void Buffer::clear() {
     consume(buffer.size());
+}
+
+void Buffer::consumeWithExtPos(int n, std::size_t& pos) {
+    if (consume(n)) {
+        pos -= n;
+    }
 }
