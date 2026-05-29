@@ -5,24 +5,38 @@
 #include "../../../include/network/protocol/PacketParser.h"
 #include "../../../include/util/Buffer.h"
 
-/**
- * 패킷의 시작점을 탐색
- * @param buffer
- * @return Packet을 찾았을 경우 STX 위치를 반환 / 없을 경우 -1
- */
-unsigned int PacketParser::findPacketStart(Buffer &buffer) {
+
+
+PacketParser::ParsingResult PacketParser::findPacketStart(Buffer& buffer) {
     const uint8_t* p = buffer.peek();
     size_t pos = 0;
-    while (pos + 1 < buffer.readableBytes()) {
-        if (p[pos] == 0x50 && p[pos+1] == 0x53) {
-            buffer.consumeWithExtPos(pos, pos);
-            return pos;
+
+    ParsingResult result;
+
+    while (pos + VANProtocol::STX_LENGTH - 1 < buffer.readableBytes()) {
+        int i = 0;
+        for (i = 0; i < VANProtocol::STX_LENGTH; i++) {
+            if (p[pos + i] != VANProtocol::STX[i]) break;
+        }
+        if (i == VANProtocol::STX_LENGTH) {
+            result.state = FOUND;
+            result.stx_pos = pos;
+            result.consumable_bytes = pos - 1;
+            return result;
         }
         pos++;
     }
-    if (p[pos] == 0x50) buffer.consume(pos);
-    else buffer.consume(pos + 1);
-    return -1;
+
+    int partial_stx_start = detectPartialPacket(p + pos, VANProtocol::STX, VANProtocol::STX_LENGTH) + pos;
+
+    if (partial_stx_start > -1) {
+        result.state = WAITING;
+        result.consumable_bytes = partial_stx_start;
+    } else {
+        result.state = NOT_FOUND;
+        result.consumable_bytes = partial_stx_start + 1;
+    }
+    return result;
 }
 
 

@@ -24,9 +24,11 @@ class PacketParser {
         size_t etx_pos;
     };
     ParserState state;
-    unsigned int parseLength(Buffer& buffer, unsigned int pos);
-    unsigned int parseType(uint8_t *data);
-    unsigned int findPacketStart(Buffer &buffer);
+    int parseLength(Buffer& buffer, unsigned int pos);
+    int parseType(uint8_t *data);
+
+
+    ParsingResult findPacketStart(Buffer &buffer);
     bool findPacketEnd(Buffer &buffer, unsigned int body_start, unsigned int length);
 
     template <size_t N>
