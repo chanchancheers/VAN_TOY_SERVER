@@ -22,6 +22,10 @@ class PacketParser {
     unsigned int parseType(uint8_t *data);
     unsigned int findPacketStart(Buffer &buffer);
     bool findPacketEnd(Buffer &buffer, unsigned int body_start, unsigned int length);
+
+    template <size_t N>
+    int detectPartialPacket(const uint8_t* p, const uint8_t (&arr)[N], unsigned int size, unsigned int start = 0, unsigned int matched = 0);
+
 public :
     std::optional<VANProtocol> parse(Buffer& buffer);
 };

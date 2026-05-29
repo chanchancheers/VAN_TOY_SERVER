@@ -25,7 +25,32 @@ unsigned int PacketParser::findPacketStart(Buffer &buffer) {
     return -1;
 }
 
-unsigned int PacketParser::parseLength(Buffer &buffer, unsigned int pos) {
+
+/**
+ *
+ * @param p buffer 문자열
+ * @param size 비교할 buffer 문자열의 크기
+ * @param arr 비교 기준점이 될 문자열 arr(STX, ETX 등)
+ * @param start 시작 pos
+ * @param matched 일치한 문자열 개수
+ * @return 일치 문자열 시작 위치 / 일치하지 않으면 -1
+ */
+template <size_t N>
+int PacketParser::detectPartialPacket(const uint8_t* p, const uint8_t (&arr)[N], unsigned int size, unsigned int start, unsigned int matched) {
+    if (start + matched >= size)
+        return matched > 0 ? start : -1;
+
+    // if (matched >= VANProtocol::STX_LENGTH)
+    if (matched >= std::size(arr))
+        return start;
+
+    if (p[start + matched] != arr[matched]) {
+        return detectPartialPacket(p, arr, size, ++start, 0);
+    }
+    return detectPartialPacket(p, arr, size, start, ++matched);
+}
+
+int PacketParser::parseLength(Buffer &buffer, unsigned int pos) {
     const uint8_t* p = buffer.peek() + pos;
     return p[pos] << 8 | p[pos + 1];
 }
