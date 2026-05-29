@@ -12,10 +12,16 @@
 
 class PacketParser {
     enum ParserState {
-        WAIT_STX,
-        READ_HEAD,
-        READ_BODY,
-        CHECK_ETX
+        NOT_FOUND,
+        FOUND,
+        WAITING,
+    };
+    struct ParsingResult {
+        ParserState state;
+        int consumable_bytes; // negatable
+        size_t stx_pos;
+        size_t length;
+        size_t etx_pos;
     };
     ParserState state;
     unsigned int parseLength(Buffer& buffer, unsigned int pos);
