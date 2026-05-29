@@ -25,7 +25,7 @@ class Session {
 
     State state;
 
-    std::string handleRead();
+    void handleRead();
     void handleWrite(std::string client_data);
 
     int read();
