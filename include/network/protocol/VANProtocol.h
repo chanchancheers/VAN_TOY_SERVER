@@ -30,6 +30,8 @@ public:
     void setWithPayload(const std::string& data);
     void setWithPayload(const uint8_t* payload, std::size_t len);
     void setWithPacket(const uint8_t* raw_data);
+
+    unsigned int getLength() { return len; }
 };
 
 #endif //SOCKET_SERVER_V2_VANPROTOCOL_H
