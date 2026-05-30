@@ -37,6 +37,44 @@ void PacketParser::findPacketStart(Buffer& buffer, ParsingResult &result) {
     }
 }
 
+void PacketParser::findLength(Buffer& buffer, ParsingResult& result) {
+    size_t length_start = result.stx_pos + VANProtocol::STX_LENGTH;
+
+    if (length_start + 1 > buffer.readableBytes()) {
+        result.state = WAITING;
+        return;
+    }
+
+    const uint8_t* p = buffer.peek() + length_start;
+    size_t len = 0;
+    for (int i = 0; i < VANProtocol::LEN_LENGTH; i++)
+        len |= p[i] << (8 * (VANProtocol::LEN_LENGTH - 1 - i));
+    if (len <= VANProtocol::LENGTH_LIMIT) {
+        result.state = FOUND;
+        result.length = len;
+        result.etx_pos = length_start + VANProtocol::LEN_LENGTH + len;
+    } else {
+        result.state = ABORT;
+    }
+}
+
+void PacketParser::findPacketEnd(Buffer& buffer, ParsingResult& result) {
+    if (buffer.readableBytes() < VANProtocol::ALL_LENGTH + result.length) {
+        result.state = WAITING;
+        return;
+    }
+    const uint8_t* p = buffer.peek() + result.etx_pos;
+    int i;
+    for (i = 0; i < VANProtocol::ETX_LENGTH; i++) {
+        if (p[i] != VANProtocol::ETX[i]) break;
+    }
+    if (i == VANProtocol::ETX_LENGTH) {
+        result.state = COMPLETE;
+    } else {
+        result.state = ABORT;
+    }
+}
+
 
 /**
  *
