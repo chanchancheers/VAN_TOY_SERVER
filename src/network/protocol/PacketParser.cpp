@@ -37,7 +37,7 @@ void PacketParser::findPacketStart(Buffer& buffer, ParsingResult &result) {
     }
 }
 
-void PacketParser::findLength(Buffer& buffer, ParsingResult& result) {
+void PacketParser::findPacketLength(Buffer& buffer, ParsingResult& result) {
     size_t length_start = result.stx_pos + VANProtocol::STX_LENGTH;
 
     if (length_start + 1 > buffer.readableBytes()) {
@@ -100,39 +100,34 @@ int PacketParser::detectPartialPacket(const uint8_t* p, const uint8_t (&arr)[N],
     return detectPartialPacket(p, arr, size, start, ++matched);
 }
 
-int PacketParser::parseLength(Buffer &buffer, unsigned int pos) {
-    const uint8_t* p = buffer.peek() + pos;
-    return p[pos] << 8 | p[pos + 1];
+PacketParser::ParsingResult PacketParser::parse(Buffer& buffer) {
+    ParsingResult result;
+    //STX check
+    findPacketStart(buffer, result);
+    if (!proceedToNext(result)) {
+        return result;
+    }
+    //length check
+    findPacketLength(buffer, result);
+    if (!proceedToNext(result)) {
+        return result;
+    }
+    findPacketEnd(buffer, result);
+    if (proceedToNext(result)) {
+
+    }
+    return result;
 }
 
-bool PacketParser::findPacketEnd(Buffer& buffer, unsigned int body_start, unsigned int length) {
-    const uint8_t* p = buffer.peek() + body_start + length;
-    return p[0] == 0x50 && p[1] == 0x45;
-}
-
-
-
-std::optional<VANProtocol> PacketParser::parse(Buffer& buffer) {
-    unsigned int packet_start;
-    unsigned int length_start;
-    unsigned int body_start;
-    if ((packet_start = findPacketStart(buffer)) != -1) {
-        length_start = packet_start + VANProtocol::STX_LENGTH;
-    } else {
-        return std::nullopt;
+bool PacketParser::proceedToNext(ParsingResult &result) {
+    switch (result.state) {
+        case FOUND :
+        case COMPLETE:
+            return true;
+        case NOT_FOUND :
+            break;
+        case WAITING :
+            break;
     }
-    unsigned int length = parseLength(buffer, length_start);
-    body_start = length_start + VANProtocol::LEN_LENGTH;
-
-
-    if (findPacketEnd(buffer, body_start, length)) {
-        VANProtocol packet;
-        packet.setLength(length);
-        packet.setData(std::vector<uint8_t>(buffer.peek() + packet_start,
-            buffer.peek() + packet_start + length + VANProtocol::ALL_LENGTH));
-        return packet;
-    } else {
-        return std::nullopt;
-    }
-
+    return false;
 }

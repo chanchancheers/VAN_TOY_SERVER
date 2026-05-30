@@ -11,12 +11,13 @@
 #include "../../util/Buffer.h"
 
 class PacketParser {
+public :
     enum ParserState {
-        NOT_FOUND,
-        FOUND,
-        WAITING,
-        ABORT,
-        COMPLETE,
+    NOT_FOUND,
+    FOUND,
+    WAITING,
+    ABORT,
+    COMPLETE,
     };
     struct ParsingResult {
         ParserState state;
@@ -25,20 +26,18 @@ class PacketParser {
         size_t length;
         size_t etx_pos;
     };
-    ParserState state;
+    ParsingResult parse(Buffer& buffer);
+private:
     int parseType(uint8_t *data);
 
-
     void findPacketStart(Buffer &buffer, ParsingResult &result);
-    void findLength(Buffer &buffer, ParsingResult &result);
+    void findPacketLength(Buffer &buffer, ParsingResult &result);
     void findPacketEnd(Buffer &buffer, ParsingResult &result);
-
+    bool proceedToNext(ParsingResult &result);
 
     template <size_t N>
     int detectPartialPacket(const uint8_t* p, const uint8_t (&arr)[N], unsigned int size, unsigned int start = 0, unsigned int matched = 0);
 
-public :
-    std::optional<VANProtocol> parse(Buffer& buffer);
 };
 
 #endif //SOCKET_SERVER_V2_PACKETPARSER_H
