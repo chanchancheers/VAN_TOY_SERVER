@@ -7,8 +7,8 @@
 
 #include <cstdint>
 #include <optional>
-#include "VANProtocol.h"
-#include "../../util/Buffer.h"
+
+class Buffer;
 
 class PacketParser {
 public :

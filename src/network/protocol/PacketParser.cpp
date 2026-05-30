@@ -4,6 +4,7 @@
 
 #include "../../../include/network/protocol/PacketParser.h"
 #include "../../../include/util/Buffer.h"
+#include "../../../include/network/protocol/VANProtocol.h"
 
 
 void PacketParser::findPacketStart(Buffer& buffer, ParsingResult &result) {
