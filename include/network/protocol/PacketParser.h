@@ -15,6 +15,8 @@ class PacketParser {
         NOT_FOUND,
         FOUND,
         WAITING,
+        ABORT,
+        COMPLETE,
     };
     struct ParsingResult {
         ParserState state;
@@ -24,12 +26,13 @@ class PacketParser {
         size_t etx_pos;
     };
     ParserState state;
-    int parseLength(Buffer& buffer, unsigned int pos);
     int parseType(uint8_t *data);
 
 
-    ParsingResult findPacketStart(Buffer &buffer);
-    bool findPacketEnd(Buffer &buffer, unsigned int body_start, unsigned int length);
+    void findPacketStart(Buffer &buffer, ParsingResult &result);
+    void findLength(Buffer &buffer, ParsingResult &result);
+    void findPacketEnd(Buffer &buffer, ParsingResult &result);
+
 
     template <size_t N>
     int detectPartialPacket(const uint8_t* p, const uint8_t (&arr)[N], unsigned int size, unsigned int start = 0, unsigned int matched = 0);
