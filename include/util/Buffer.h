@@ -11,8 +11,9 @@
 class Buffer {
     std::vector<uint8_t> buffer;
     int offset = 0;
-    int threshold = 1024 * 8;
 public :
+    static constexpr unsigned int threshold = 1024 * 8;
+    static constexpr unsigned int size_limit = 1024 * 64;
     int append(const uint8_t* data, std::size_t len);
     int consume(int n);
     void consumeWithExtPos(int n, std::size_t& pos);
