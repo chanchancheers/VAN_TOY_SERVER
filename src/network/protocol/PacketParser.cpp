@@ -6,13 +6,11 @@
 #include "../../../include/util/Buffer.h"
 
 
-
-PacketParser::ParsingResult PacketParser::findPacketStart(Buffer& buffer) {
+void PacketParser::findPacketStart(Buffer& buffer, ParsingResult &result) {
     const uint8_t* p = buffer.peek();
     size_t pos = 0;
 
-    ParsingResult result;
-
+    //STX PARSING POSSIBLE
     while (pos + VANProtocol::STX_LENGTH - 1 < buffer.readableBytes()) {
         int i = 0;
         for (i = 0; i < VANProtocol::STX_LENGTH; i++) {
@@ -22,11 +20,12 @@ PacketParser::ParsingResult PacketParser::findPacketStart(Buffer& buffer) {
             result.state = FOUND;
             result.stx_pos = pos;
             result.consumable_bytes = pos - 1;
-            return result;
+            return;
         }
         pos++;
     }
 
+    // PARTIAL PROBABILITY CHECK
     int partial_stx_start = detectPartialPacket(p + pos, VANProtocol::STX, VANProtocol::STX_LENGTH) + pos;
 
     if (partial_stx_start > -1) {
@@ -36,7 +35,6 @@ PacketParser::ParsingResult PacketParser::findPacketStart(Buffer& buffer) {
         result.state = NOT_FOUND;
         result.consumable_bytes = partial_stx_start + 1;
     }
-    return result;
 }
 
 
