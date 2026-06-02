@@ -17,7 +17,8 @@ class Session {
     PacketParser packet_parser;
 
     enum class State {
-        //
+        ACTIVE,
+        CLOSING
     };
 
     State state;

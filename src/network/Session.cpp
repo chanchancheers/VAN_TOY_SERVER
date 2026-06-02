@@ -3,14 +3,38 @@
 //
 #include "../../include/network/Session.h"
 
-std::string Session::handleRead() {
-    std::string returned_data;
-    int read_byte = read();
-    // returned_data = reinterpret_cast<std::string>
-    for (int i = 0; i < read_byte; i++) {
-        returned_data.push_back(*(read_buffer.peek() + i));
+#include "../../include/network/Factory/SocketFactory.h"
+#include "../../include/network/protocol/VANProtocol.h"
+
+Session::Session(intptr_t sockfd) {
+    socket = SocketFactory::create();
+    socket->setHandle(sockfd);
+}
+
+void Session::handleRead() {
+    int read_byte = Session::read();
+    if (read_byte == 0) {
+        //abort
+    } else if (read_byte == -1) {
+        //abort
     }
-    return returned_data;
+    PacketParser::ParsingResult parsing_result = packet_parser.parse(socket->read_buffer);
+    switch (parsing_result.state) {
+        case (PacketParser::WAITING) :
+            socket->read_buffer.consume(parsing_result.consumable_bytes);
+            break;
+        case(PacketParser::NOT_FOUND) :
+        case(PacketParser::ABORT):
+            socket->read_buffer.consume(parsing_result.consumable_bytes);
+            break;
+        case(PacketParser::COMPLETE) :
+            VANProtocol protocol;
+            const uint8_t* p = socket->read_buffer.peek();
+            protocol.setData(std::vector(p + parsing_result.stx_pos, p + parsing_result.etx_pos + VANProtocol::ETX_LENGTH - 1));
+            //TODO 서비스 핸들러에게 프로토콜 전달
+            break;
+    }
+
 }
 
 void Session::handleWrite(std::string client_data) {
@@ -24,10 +48,10 @@ void Session::handleWrite(std::string client_data) {
 
 int Session::read() {
     int len = 0;
-    uint8_t tmp[BUFFER_SIZE];
+    uint8_t tmp[socket->read_buffer.size_limit];
     while (true) {
-        int n = conn->read(read_buffer, read_buffer.readableBytes());
-        if (n > 0) read_buffer.append(tmp, n);
+        int n = socket->read(socket->read_buffer.readableBytes());
+        if (n > 0) socket->read_buffer.append(tmp, n);
         else if (n == 0) return 0;
         else {
             if (errno == EAGAIN || errno == EWOULDBLOCK) break;
@@ -39,17 +63,17 @@ int Session::read() {
 }
 
 int Session::write(const uint8_t* data, std::size_t len) {
-    write_buffer.append(data, len);
+    socket->write_buffer.append(data, len);
     //TODO isWriting 같은 상태처리 필요
     return len;
 }
 
 int Session::flush() {
     int n = 0;
-    while (write_buffer.readableBytes() > 0) {
-        int sent = conn->send(write_buffer.peek(), write_buffer.readableBytes());
+    while (socket->write_buffer.readableBytes() > 0) {
+        int sent = socket->send(socket->write_buffer.peek(), socket->write_buffer.readableBytes());
         if (sent > 0) {
-            write_buffer.consume(sent);
+            socket->write_buffer.consume(sent);
             n += sent;
         } else {
             if (errno == EAGAIN || errno == EWOULDBLOCK) {
@@ -62,10 +86,10 @@ int Session::flush() {
 }
 
 intptr_t Session::getSockfd() {
-    return conn->getHandle();
+    return socket->getHandle();
 }
 
 bool Session::checkConeectionAlive() {
-    return conn->msgPeek() > 0;
+    return socket->msgPeek() > 0;
 }
 
