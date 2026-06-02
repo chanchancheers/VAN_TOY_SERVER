@@ -52,5 +52,8 @@ intptr_t MacSocket::getHandle() const {
     return (intptr_t) sockfd;
 }
 
+void MacSocket::setHandle(intptr_t sockfd) {
+    this->sockfd = sockfd;
+}
 
 

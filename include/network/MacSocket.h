@@ -21,6 +21,7 @@ public :
     int msgPeek();
 
     intptr_t getHandle() const;
+    void setHandle(intptr_t sockfd);
 };
 
 
