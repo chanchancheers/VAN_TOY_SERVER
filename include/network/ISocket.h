@@ -2,16 +2,15 @@
 // Created by 신은찬 on 5/14/26.
 //
 
-#ifndef SOCKET_SERVER_V2_ICONNECTION_H
-#define SOCKET_SERVER_V2_ICONNECTION_H
+#ifndef SOCKET_SERVER_V2_ISOCKET_H
+#define SOCKET_SERVER_V2_ISOCKET_H
 
 #include <cstdint>
 #include <vector>
 
 #include "../util/Buffer.h"
 
-
-class IConnection {
+class ISocket {
 public:
     virtual ~IConnection() = default;
     virtual bool create(const std::string& host, int port) = 0;
@@ -24,4 +23,4 @@ public:
 };
 
 
-#endif //SOCKET_SERVER_V2_ICONNECTION_H
+#endif //SOCKET_SERVER_V2_ISOCKET_H

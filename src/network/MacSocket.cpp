@@ -1,4 +1,4 @@
-#include "../../include/network/MacConnection.h"
+#include "../../include/network/MacSocket.h"
 
 #include <unistd.h>
 #include <arpa/inet.h>
@@ -7,6 +7,8 @@
 #include <fcntl.h>
 
 bool MacConnection::create(const std::string& host, int port) {
+MacSocket::MacSocket() {
+bool MacSocket::create(const std::string& host, int port) {
     sockfd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (sockfd < 0) return false;
 
@@ -24,26 +26,27 @@ bool MacConnection::create(const std::string& host, int port) {
 
 int MacConnection::read(Buffer &buffer, std::size_t len) {
     ::read(sockfd, buffer.data(), len);
+int MacSocket::read(std::size_t len) {
 }
 
-int MacConnection::msgPeek() {
+int MacSocket::msgPeek() {
     char c;
     return ::recv(sockfd, &c, 1, MSG_PEEK);
 }
 
 //
-int MacConnection::send(const uint8_t* data, std::size_t len) {
+int MacSocket::send(const uint8_t* data, std::size_t len) {
     ::send(sockfd, data, len, MSG_NOSIGNAL);
 }
 
-void MacConnection::close() {
+void MacSocket::close() {
     if (sockfd >= 0) {
         ::close(sockfd);
         sockfd = -1;
     }
 }
 
-intptr_t MacConnection::getHandle() const {
+intptr_t MacSocket::getHandle() const {
     return (intptr_t) sockfd;
 }
 
