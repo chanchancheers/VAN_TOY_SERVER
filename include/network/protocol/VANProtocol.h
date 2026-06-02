@@ -7,6 +7,8 @@
 #include <string>
 #include <vector>
 
+class Buffer;
+
 class VANProtocol {
     std::vector<uint8_t> data;
     unsigned int len = 0;
