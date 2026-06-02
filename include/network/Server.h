@@ -10,10 +10,23 @@
 class Server {
     std::unordered_map<int, std::shared_ptr<Session>> sessions;
     EventLoop& event_loop;
+    intptr_t LISTEN_FD;
     Server();
+
 public:
-    void accept();
+    enum class ServerState {
+        RUNNING,
+        CLOSING,
+        CLOSED,
+    };
+    const int PORT  = 40445;
+    void run();
+
     void dispatchEvents();
+
+    void registerSession();
+    intptr_t accept();
+
     void handleEvent(intptr_t sockfd);
     static Server& getInstance() {
         static Server server;
@@ -21,6 +34,10 @@ public:
     }
     void wakeEventLoopUp();
     void close(intptr_t sockfd);
+    ServerState getServerState();
+    void setServerState(ServerState);
+private :
+    ServerState state;
 };
 
 
