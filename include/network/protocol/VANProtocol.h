@@ -17,6 +17,7 @@ public:
     static constexpr unsigned int ETX_LENGTH = 2;
     static constexpr unsigned int LEN_LENGTH = 2;
     static constexpr unsigned int ALL_LENGTH = STX_LENGTH + ETX_LENGTH + LEN_LENGTH;
+    static constexpr unsigned int LENGTH_LIMIT = 1024 * 4 - ALL_LENGTH;
 
     static const uint8_t STX[STX_LENGTH];
     static const uint8_t ETX[ETX_LENGTH];
