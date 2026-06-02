@@ -71,12 +71,17 @@ wakeupEventLoop();
 
 /**
  * 세션이 생성될 때 세션의 소켓fd로 이벤트를 생성 및 리스트업
- * @param session
+ * @param sockfd
  */
-void EventLoop::registerSession(Session session) {
-    // chlist에 감시할 sockfd를 넣고, READ가 발생하는지 본다. 등록하면서 ADD 및 ENABLE 처리.
+void EventLoop::registerReadEvent(intptr_t sockfd) {
     struct kevent kev;
-    EV_SET(&kev, session.getSockfd(), EVFILT_READ, EV_ADD | EV_ENABLE, 0,0,0);
+    EV_SET(&kev, sockfd, EVFILT_READ, EV_ADD | EV_ENABLE, 0,0,0);
+    chlist.push_back(kev);
+}
+
+void EventLoop::registerWriteEvent(intptr_t sockfd) {
+    struct kevent kev;
+    EV_SET(&kev, sockfd, EVFILT_WRITE, EV_ADD|EV_ENABLE, 0 ,0, 0);
     chlist.push_back(kev);
 }
 

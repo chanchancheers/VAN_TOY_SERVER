@@ -33,7 +33,8 @@ public :
         return eventloop;
     }
 
-    void registerSession(Session session);
+    void registerReadEvent(intptr_t sockfd);
+    void registerWriteEvent(intptr_t sockfd);
     void applyPendingChanges();
     int* getPipefd();
     void wakeUp();
