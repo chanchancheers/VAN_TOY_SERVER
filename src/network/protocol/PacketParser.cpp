@@ -27,9 +27,10 @@ void PacketParser::findPacketStart(Buffer& buffer, ParsingResult &result) {
     }
 
     // PARTIAL PROBABILITY CHECK
-    int partial_stx_start = detectPartialPacket(p + pos, VANProtocol::STX, VANProtocol::STX_LENGTH) + pos;
+    int partial_stx_start_offset = pos + detectPartialPacket(p + pos, VANProtocol::STX, VANProtocol::STX_LENGTH);
+    int partial_stx_start = pos + partial_stx_start_offset;
 
-    if (partial_stx_start > -1) {
+    if (partial_stx_start_offset > -1) {
         result.state = WAITING;
         result.consumable_bytes = partial_stx_start;
     } else {
@@ -56,6 +57,7 @@ void PacketParser::findPacketLength(Buffer& buffer, ParsingResult& result) {
         result.etx_pos = length_start + VANProtocol::LEN_LENGTH + len;
     } else {
         result.state = ABORT;
+        result.consumable_bytes = length_start + VANProtocol::LEN_LENGTH; //  length의 마지막 위치에 있는 요소까지 삭제
     }
 }
 
@@ -73,6 +75,7 @@ void PacketParser::findPacketEnd(Buffer& buffer, ParsingResult& result) {
         result.state = COMPLETE;
     } else {
         result.state = ABORT;
+        result.consumable_bytes = result.etx_pos + VANProtocol::ETX_LENGTH;
     }
 }
 
@@ -102,7 +105,7 @@ int PacketParser::detectPartialPacket(const uint8_t* p, const uint8_t (&arr)[N],
 }
 
 PacketParser::ParsingResult PacketParser::parse(Buffer& buffer) {
-    ParsingResult result;
+    ParsingResult result{};
     //STX check
     findPacketStart(buffer, result);
     if (!proceedToNext(result)) {
@@ -114,9 +117,6 @@ PacketParser::ParsingResult PacketParser::parse(Buffer& buffer) {
         return result;
     }
     findPacketEnd(buffer, result);
-    if (proceedToNext(result)) {
-
-    }
     return result;
 }
 

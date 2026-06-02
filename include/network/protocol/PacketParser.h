@@ -37,7 +37,6 @@ private:
 
     template <size_t N>
     int detectPartialPacket(const uint8_t* p, const uint8_t (&arr)[N], unsigned int size, unsigned int start = 0, unsigned int matched = 0);
-
 };
 
 #endif //SOCKET_SERVER_V2_PACKETPARSER_H
