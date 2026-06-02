@@ -12,7 +12,10 @@
 
 class ISocket {
 public:
-    virtual ~IConnection() = default;
+    Buffer read_buffer;
+    Buffer write_buffer;
+
+    virtual ~ISocket() = default;
     virtual bool create(const std::string& host, int port) = 0;
     virtual int read(Buffer &buffer, std::size_t len) = 0;
     virtual int msgPeek() = 0;

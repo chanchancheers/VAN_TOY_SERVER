@@ -7,15 +7,12 @@
 
 #include <vector>
 #include <memory>
-#include "../../include/network/IConnection.h"
+#include "../../include/network/ISocket.h"
 #include "../../include/util/Buffer.h"
 #include "../../include/network/protocol/PacketParser.h"
 
 class Session {
-    std::shared_ptr<IConnection> conn;
-
-    Buffer read_buffer;
-    Buffer write_buffer;
+    std::unique_ptr<ISocket> socket;
 
     PacketParser packet_parser;
 
@@ -39,12 +36,10 @@ class Session {
     void close();
 
 public :
-    explicit Session(std::shared_ptr<IConnection> conn);
+    explicit Session(intptr_t sockfd);
     ~Session();
 
     intptr_t getSockfd();
-
-    int BUFFER_SIZE = 4096;
 
     void onReadable();
     void onWritable();

@@ -6,8 +6,11 @@
 #include <string>
 #include <fcntl.h>
 
-bool MacConnection::create(const std::string& host, int port) {
 MacSocket::MacSocket() {
+    read_buffer = Buffer();
+    write_buffer = Buffer();
+}
+
 bool MacSocket::create(const std::string& host, int port) {
     sockfd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (sockfd < 0) return false;
@@ -24,9 +27,8 @@ bool MacSocket::create(const std::string& host, int port) {
     return connected;
 }
 
-int MacConnection::read(Buffer &buffer, std::size_t len) {
-    ::read(sockfd, buffer.data(), len);
 int MacSocket::read(std::size_t len) {
+    ::read(sockfd, read_buffer.data(), len);
 }
 
 int MacSocket::msgPeek() {
