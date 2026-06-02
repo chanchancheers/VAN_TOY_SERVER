@@ -17,12 +17,14 @@ public:
 
     virtual ~ISocket() = default;
     virtual bool create(const std::string& host, int port) = 0;
-    virtual int read(Buffer &buffer, std::size_t len) = 0;
-    virtual int msgPeek() = 0;
-    virtual int send(const uint8_t* data, std::size_t len) = 0;
     virtual void close() = 0;
 
+    virtual int read(std::size_t len) = 0;
+    virtual int send(const uint8_t* data, std::size_t len) = 0;
+    virtual int msgPeek() = 0;
+
     virtual intptr_t getHandle() const = 0;
+    virtual void setHandle(intptr_t sockfd) = 0;
 };
 
 
