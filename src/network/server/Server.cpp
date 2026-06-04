@@ -12,7 +12,7 @@
 #include "../../../include/network/server/WorkerPool.h"
 #include "../../../include/dto/Task.h"
 
-Server::Server() : event_loop(EventLoop::getInstance()){
+Server::Server() : event_loop(EventLoop::getInstance()), worker_pool(WorkerPool::getInstance()){
     // register a listening Event
     LISTEN_FD = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     sockaddr_in addr{};
@@ -85,6 +85,10 @@ intptr_t Server::accept() {
  * Worker에게 sockfd를 넘겨주고 이벤트 처리 시작
  * @param sockfd
  */
-void Server::handleEvent(intptr_t sockfd) {
-
+void Server::handleReadEvent(intptr_t sockfd) {
+    auto result = sessions.find(sockfd)->second.get()->onReadable();
+    if (result) {
+        Task task(sockfd, result.value());
+        worker_pool.enqueue(task);
+    }
 }

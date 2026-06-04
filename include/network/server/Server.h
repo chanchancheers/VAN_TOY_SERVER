@@ -6,10 +6,12 @@
 
 #include "EventLoop.h"
 #include "Session.h"
+#include "WorkerPool.h"
 
 class Server {
     std::unordered_map<int, std::shared_ptr<Session>> sessions;
     EventLoop& event_loop;
+    WorkerPool& worker_pool;
     intptr_t LISTEN_FD;
     Server();
 
