@@ -17,13 +17,11 @@ WorkerPool::WorkerPool(size_t size) {
 
 void WorkerPool::doWorkerLoop() {
     while (true) {
-        auto task = jobQueue.front();
-        jobQueue.pop();
-
+        auto task = job_queue.pop();
         Task result = processTask(task);
         if (result.isSuccess()) {
-            resultQueue.push(result);
-            //TODO wakeup call
+            result_queue.push(result);
+            wakeUpEventLoop();
         }
     }
 }

@@ -13,8 +13,8 @@ class WorkerPool {
     WorkerPool(size_t = 10);
     void doWorkerLoop();
     std::vector<std::thread> workers;
-    std::queue<Task> jobQueue;
-    std::queue<Task> resultQueue;
+    JobQueue<Task> job_queue;
+    JobQueue<Task> result_queue;
     Task processTask(Task);
 
 
@@ -30,6 +30,9 @@ public:
         return worker_pool;
     }
 
+    void enqueue(Task task) {
+        job_queue.push(std::move(task));
+    }
 
 };
 
