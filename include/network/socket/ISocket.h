@@ -8,7 +8,7 @@
 #include <cstdint>
 #include <vector>
 
-#include "../util/Buffer.h"
+#include "../../util/Buffer.h"
 
 class ISocket {
 public:

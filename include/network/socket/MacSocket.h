@@ -5,7 +5,7 @@
 #ifndef SOCKET_SERVER_V2_MACSOCKET_H
 #define SOCKET_SERVER_V2_MACSOCKET_H
 #include "ISocket.h"
-#include "../util/Buffer.h"
+#include "../../util/Buffer.h"
 
 class MacSocket : public ISocket {
     int sockfd;

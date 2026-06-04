@@ -2,8 +2,7 @@
 #include <sys/event.h>
 #include <sys/fcntl.h>
 
-#include "../../include/network/EventLoop.h"
-#include "../../include/util/Buffer.h"
+#include "../../../include/network/server/EventLoop.h"
 
 
 EventLoop::EventLoop() : evlist(MAX_EVENT) {

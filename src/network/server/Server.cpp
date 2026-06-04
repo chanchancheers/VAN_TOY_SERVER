@@ -3,12 +3,14 @@
 //
 
 #include <unistd.h>
-#include "../../include/network/Server.h"
 
 #include <netinet/in.h>
 #include <sys/socket.h>
 
-#include "../../include/network/EventLoop.h"
+#include "../../../include/network/server/Server.h"
+#include "../../../include/network/server/EventLoop.h"
+#include "../../../include/network/server/WorkerPool.h"
+#include "../../../include/dto/Task.h"
 
 Server::Server() : event_loop(EventLoop::getInstance()){
     // register a listening Event

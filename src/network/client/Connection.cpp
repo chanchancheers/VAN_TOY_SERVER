@@ -2,9 +2,9 @@
 // Created by 신은찬 on 6/2/26.
 //
 
-#include "../../include/network/Connection.h"
+#include "../../../include/network/client/Connection.h"
 
-#include "../../include/network/Factory/SocketFactory.h"
+#include "../../../include/network/Factory/SocketFactory.h"
 
 /**
  *

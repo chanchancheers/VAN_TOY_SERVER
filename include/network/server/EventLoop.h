@@ -2,13 +2,13 @@
 // Created by 신은찬 on 5/20/26.
 //
 
-#ifndef SOCKET_SERVER_V2_ENVETLOOP_H
-#define SOCKET_SERVER_V2_ENVETLOOP_H
+#ifndef SOCKET_SERVER_V2_EVENTLOOP_H
+#define SOCKET_SERVER_V2_EVENTLOOP_H
 #include <cstdio>
 #include <cstdlib>
 #include <sys/event.h>
 #include "Session.h"
-#include "../util/Buffer.h"
+#include "../../util/Buffer.h"
 
 class EventLoop {
     int kq;

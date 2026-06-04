@@ -2,7 +2,7 @@
 // Created by 신은찬 on 6/2/26.
 //
 #include "../../../include/network/Factory/SocketFactory.h"
-#include "../../../include/network/MacSocket.h"
+#include "../../../include/network/socket/MacSocket.h"
 
 
 std::unique_ptr<ISocket> SocketFactory::create() {

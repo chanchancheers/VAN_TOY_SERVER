@@ -1,7 +1,7 @@
 //
 // Created by 신은찬 on 5/18/26.
 //
-#include "../../include/network/Session.h"
+#include "../../include/network/server/Session.h"
 
 #include "../../include/network/Factory/SocketFactory.h"
 #include "../../include/network/protocol/VANProtocol.h"

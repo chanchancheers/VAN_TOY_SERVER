@@ -6,7 +6,8 @@
 #define SOCKET_SERVER_V2_WORKERPOOL_H
 #include <queue>
 #include <thread>
-#include "../dto/Task.h"
+#include "../../dto/Task.h"
+#include "../../util/JobQueue.h"
 
 class WorkerPool {
     WorkerPool(size_t = 10);

@@ -7,7 +7,7 @@
 #include <string>
 #include <memory>
 
-#include "ISocket.h"
+#include "../socket/ISocket.h"
 
 class Connection {
     std::unique_ptr<ISocket> socket_wrapper;

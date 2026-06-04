@@ -7,9 +7,9 @@
 
 #include <vector>
 #include <memory>
-#include "../../include/network/ISocket.h"
-#include "../../include/util/Buffer.h"
-#include "../../include/network/protocol/PacketParser.h"
+#include "../socket/ISocket.h"
+#include "../protocol/PacketParser.h"
+#include "../protocol/VANProtocol.h"
 
 class Session {
     std::unique_ptr<ISocket> socket;
