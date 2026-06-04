@@ -12,6 +12,8 @@ class Task {
     bool success;
 
 public :
+    Task(intptr_t sockfd, VANProtocol protocol) : sockfd(sockfd), protocol(protocol) {}
+
     void setSockfd(intptr_t);
     intptr_t getSockfd() { return sockfd; }
 
