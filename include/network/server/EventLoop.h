@@ -16,7 +16,8 @@ class EventLoop {
     std::vector<struct kevent> chlist;
     unsigned int MAX_EVENT = 1000;
     std::vector<struct kevent> evlist;
-    int pipefd[2];
+    int wake_general_pipefd[2];
+    int wake_write_pipefd[2];
     Buffer write_buffer;
     Buffer read_buffer;
 
@@ -36,8 +37,10 @@ public :
     void registerReadEvent(intptr_t sockfd);
     void registerWriteEvent(intptr_t sockfd);
     void applyPendingChanges();
-    int* getPipefd();
-    void wakeUp();
+    int* getGeneralPipefd();
+    int* getWritePipefd();
+    void wakeUpGeneral();
+    void wakeUpWrite();
     std::vector<struct kevent> doLoop(int& event_size);
 
     Buffer getReadBuffer() { return read_buffer; }

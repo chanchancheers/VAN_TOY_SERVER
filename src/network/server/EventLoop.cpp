@@ -10,19 +10,31 @@ EventLoop::EventLoop() : evlist(MAX_EVENT) {
         perror("kqueue");
         exit(EXIT_FAILURE);
     }
-    if (pipe(pipefd) == -1) {
+    if (pipe(wake_general_pipefd) == -1) {
         perror("pipe");
         exit(EXIT_FAILURE);
     }
-    struct kevent kev;
-    EV_SET(&kev, pipefd[0], EVFILT_READ, EV_ADD | EV_ENABLE, 0, 0, 0);
-    if (kevent(kq,&kev, 1, NULL, 0, NULL) == -1) {
-        perror("pipe event not registered.");
+    // wakeUp용 pipe 이벤트
+    struct kevent wake_general_event;
+    EV_SET(&wake_general_event, wake_general_pipefd[0], EVFILT_READ, EV_ADD | EV_ENABLE, 0, 0, 0);
+    if (kevent(kq,&wake_general_event, 1, NULL, 0, NULL) == -1) {
+        perror("wake-general pipe event not registered.");
         exit(EXIT_FAILURE);
     }
+
+    // write event 감지용 pipe 이벤트
+    struct kevent wake_write_event;
+    EV_SET(&wake_write_event, wake_write_pipefd[0], EVFILT_WRITE, EV_ADD | EV_ENABLE, 0, 0, 0);
+    if (kevent(kq,&wake_write_event, 1, NULL, 0, NULL) == -1) {
+        perror("wake-write pipe event not registered.");
+        exit(EXIT_FAILURE);
+    }
+
     // 이것만큼은 Non-blocking
-    fcntl(pipefd[0], F_SETFL, O_NONBLOCK);
-    fcntl(pipefd[1], F_SETFL, O_NONBLOCK);
+    fcntl(wake_general_pipefd[0], F_SETFL, O_NONBLOCK);
+    fcntl(wake_general_pipefd[1], F_SETFL, O_NONBLOCK);
+    fcntl(wake_write_pipefd[1], F_SETFL, O_NONBLOCK);
+    fcntl(wake_write_pipefd[1], F_SETFL, O_NONBLOCK);
 }
 
 
@@ -97,9 +109,18 @@ void EventLoop::applyPendingChanges() {
 /**
  * 이벤트루프의 blocking 상태를 해제
  */
-void EventLoop::wakeUp() {
+void EventLoop::wakeUpGeneral() {
     int garbage = 1;
-    int n = write(pipefd[1], &garbage, 1);
+    int n = write(wake_general_pipefd[1], &garbage, 1);
+    if (n == -1 && errno != EAGAIN && errno != EWOULDBLOCK) {
+        perror("write pipe error");
+        exit(EXIT_FAILURE);
+    }
+}
+
+void EventLoop::wakeUpWrite() {
+    int garbage = 1;
+    int n = write(wake_write_pipefd[1], &garbage, 1);
     if (n == -1 && errno != EAGAIN && errno != EWOULDBLOCK) {
         perror("write pipe error");
         exit(EXIT_FAILURE);
@@ -127,3 +148,12 @@ std::vector<struct kevent> EventLoop::doLoop(int& event_size) {
         return evlist;
     }
 }
+
+int *EventLoop::getGeneralPipefd() {
+    return wake_general_pipefd;
+}
+
+int *EventLoop::getWritePipefd() {
+    return wake_write_pipefd;
+}
+
