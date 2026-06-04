@@ -29,7 +29,7 @@ public:
     void registerSession();
     intptr_t accept();
 
-    void handleEvent(intptr_t sockfd);
+    void handleReadEvent(intptr_t sockfd);
     static Server& getInstance() {
         static Server server;
         return server;
